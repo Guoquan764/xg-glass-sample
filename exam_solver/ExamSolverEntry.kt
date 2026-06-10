@@ -248,18 +248,16 @@ private class ExamSolverCommand : UniversalCommand {
         val base64Image = Base64.getEncoder().encodeToString(imageBytes)
 
         val prompt =
-            "Please answer all questions shown in the current image. " +
-            "A request is considered invalid if the image is irrelevant to this task. " +
-            "If the request is valid, provide concise and correct answers with minimal analysis. " +
-            "For a valid request, first return 'valid request' and then return one or more lines " +
-            "in the format: '<question_id>: (<analysis>) **<answer>**'. " +
-            "If the request is invalid due to text too small or blurred, still try your best to answer, " +
-            "i.e., return 'valid request', a warning of 'the answer might be incorrect due to text too " +
-            "small, please stay closer' and then return one or more lines in the format: " +
-            "'<question_id>: (<analysis>) **answer**'. " +
-            "If it is really hard to parse or invalid due to other reasons, return: " +
-            "'invalid request: <brief_reason>'. " +
-            "Ensure the output strictly matches the format above."
+            "Please solve the linear algebra or proof questions shown in the current image. " +
+             "A request is considered invalid only if the image is unrelated or the text is impossible to read. " +
+             "If the request is valid, first return 'valid request'. " +
+             "Then answer each visible question using the format: '<question_id>: (<short proof or key steps>) **<final conclusion>**'. " +
+             "For proof questions, give a concise but complete proof outline with the main theorem or property used. " +
+             "For calculation questions, show the key formula and final result. " +
+             "If there are too many questions in the image, prioritize the clearest visible questions and keep each answer short. " +
+             "If some text is too small or blurred, still try your best and include a warning: 'text unclear, answer may be incomplete'. " +
+             "If it is really impossible to parse, return: 'invalid request: <brief_reason>'. " +
+             "Ensure the output starts with either 'valid request' or 'invalid request'."
 
         // Snapshot messages before this round so we can rollback on failure / invalid.
         val messagesSnapshot = ArrayList(messages)
